@@ -29,6 +29,7 @@
 		4982B6CA29CA3665008D2CCD /* MarkdownHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */; };
 		4982B6EC29CB9E15008D2CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4982B69229CA333E008D2CCD /* Assets.xcassets */; };
 		C107473329D255E700531E5C /* python-third-party in Resources */ = {isa = PBXBuildFile; fileRef = C107473229D255E700531E5C /* python-third-party */; };
+		C1754B3F29D21CF400FCE88E /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = C1754B3E29D21CF400FCE88E /* PythonKit */; };
 		C1754B4129D21D3900FCE88E /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1754B4029D21D3900FCE88E /* StatusBarView.swift */; };
 		C1754B4629D22F6400FCE88E /* python-stdlib in Resources */ = {isa = PBXBuildFile; fileRef = C1754B4429D22F6400FCE88E /* python-stdlib */; };
 		C1754B4729D22F8A00FCE88E /* Python.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1754B4329D22F6400FCE88E /* Python.xcframework */; };
@@ -65,6 +66,7 @@
 				4982B6A829CA35BA008D2CCD /* Markdownosaur in Frameworks */,
 				C1754B4729D22F8A00FCE88E /* Python.xcframework in Frameworks */,
 				4982B6A429CA339A008D2CCD /* SwiftChatGPT in Frameworks */,
+				C1754B3F29D21CF400FCE88E /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +177,7 @@
 				4982B69E29CA3371008D2CCD /* Introspect */,
 				4982B6A329CA339A008D2CCD /* SwiftChatGPT */,
 				4982B6A729CA35BA008D2CCD /* Markdownosaur */,
+				C1754B3E29D21CF400FCE88E /* PythonKit */,
 			);
 			productName = PlaticaBot;
 			productReference = 4982B68B29CA333C008D2CCD /* PlaticaBot.app */;
@@ -234,6 +237,7 @@
 				4982B6A229CA339A008D2CCD /* XCRemoteSwiftPackageReference "SwiftChatGPT" */,
 				4982B6A529CA33DD008D2CCD /* XCRemoteSwiftPackageReference "swift-markdown" */,
 				4982B6A629CA35BA008D2CCD /* XCRemoteSwiftPackageReference "Markdownosaur" */,
+				C1754B3D29D21CF400FCE88E /* XCRemoteSwiftPackageReference "PythonKit" */,
 			);
 			productRefGroup = 4982B68C29CA333C008D2CCD /* Products */;
 			projectDirPath = "";
@@ -637,6 +641,14 @@
 				kind = branch;
 			};
 		};
+		C1754B3D29D21CF400FCE88E /* XCRemoteSwiftPackageReference "PythonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pvieito/PythonKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -669,6 +681,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4982B6A629CA35BA008D2CCD /* XCRemoteSwiftPackageReference "Markdownosaur" */;
 			productName = Markdownosaur;
+		};
+		C1754B3E29D21CF400FCE88E /* PythonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1754B3D29D21CF400FCE88E /* XCRemoteSwiftPackageReference "PythonKit" */;
+			productName = PythonKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
