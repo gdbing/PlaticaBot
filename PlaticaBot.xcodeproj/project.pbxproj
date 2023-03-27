@@ -29,6 +29,8 @@
 		4982B6CA29CA3665008D2CCD /* MarkdownHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */; };
 		4982B6EC29CB9E15008D2CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4982B69229CA333E008D2CCD /* Assets.xcassets */; };
 		C1754B4129D21D3900FCE88E /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1754B4029D21D3900FCE88E /* StatusBarView.swift */; };
+		C1754B4629D22F6400FCE88E /* python-stdlib in Resources */ = {isa = PBXBuildFile; fileRef = C1754B4429D22F6400FCE88E /* python-stdlib */; };
+		C1754B4729D22F8A00FCE88E /* Python.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1754B4329D22F6400FCE88E /* Python.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkdownHelpers.swift; sourceTree = "<group>"; };
 		4982B6CD29CA3C3C008D2CCD /* PlaticaWatch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PlaticaWatch Watch App.entitlements"; sourceTree = "<group>"; };
 		C1754B4029D21D3900FCE88E /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
+		C1754B4329D22F6400FCE88E /* Python.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Python.xcframework; path = PlaticaBot/Python.xcframework; sourceTree = "<group>"; };
+		C1754B4429D22F6400FCE88E /* python-stdlib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "python-stdlib"; path = "PlaticaBot/python-stdlib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,7 @@
 			files = (
 				4982B69F29CA3371008D2CCD /* Introspect in Frameworks */,
 				4982B6A829CA35BA008D2CCD /* Markdownosaur in Frameworks */,
+				C1754B4729D22F8A00FCE88E /* Python.xcframework in Frameworks */,
 				4982B6A429CA339A008D2CCD /* SwiftChatGPT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +145,8 @@
 		4982B6BB29CA360A008D2CCD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1754B4429D22F6400FCE88E /* python-stdlib */,
+				C1754B4329D22F6400FCE88E /* Python.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -154,6 +161,7 @@
 				4982B68729CA333C008D2CCD /* Sources */,
 				4982B68829CA333C008D2CCD /* Frameworks */,
 				4982B68929CA333C008D2CCD /* Resources */,
+				C1754B4A29D22FCE00FCE88E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -240,7 +248,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4982B69729CA333E008D2CCD /* Preview Assets.xcassets in Resources */,
+				C107473329D255E700531E5C /* python-third-party in Resources */,
 				4982B69329CA333E008D2CCD /* Assets.xcassets in Resources */,
+				C1754B4629D22F6400FCE88E /* python-stdlib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +265,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C1754B4A29D22FCE00FCE88E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\necho \"Signing as $EXPANDED_CODE_SIGN_IDENTITY_NAME ($EXPANDED_CODE_SIGN_IDENTITY)\"\nfind \"$CODESIGNING_FOLDER_PATH/Contents/Resources/python-stdlib/lib-dynload\" -name \"*.so\" -exec /usr/bin/codesign --force --sign \"$EXPANDED_CODE_SIGN_IDENTITY\" -o runtime --timestamp=none --preserve-metadata=identifier,entitlements,flags --generate-entitlement-der {} \\;\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4982B68729CA333C008D2CCD /* Sources */ = {
