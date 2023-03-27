@@ -28,6 +28,7 @@
 		4982B6C929CA3665008D2CCD /* MarkdownHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */; };
 		4982B6CA29CA3665008D2CCD /* MarkdownHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */; };
 		4982B6EC29CB9E15008D2CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4982B69229CA333E008D2CCD /* Assets.xcassets */; };
+		C107473329D255E700531E5C /* python-third-party in Resources */ = {isa = PBXBuildFile; fileRef = C107473229D255E700531E5C /* python-third-party */; };
 		C1754B4129D21D3900FCE88E /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1754B4029D21D3900FCE88E /* StatusBarView.swift */; };
 		C1754B4629D22F6400FCE88E /* python-stdlib in Resources */ = {isa = PBXBuildFile; fileRef = C1754B4429D22F6400FCE88E /* python-stdlib */; };
 		C1754B4729D22F8A00FCE88E /* Python.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1754B4329D22F6400FCE88E /* Python.xcframework */; };
@@ -49,6 +50,7 @@
 		4982B6C529CA3665008D2CCD /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkdownHelpers.swift; sourceTree = "<group>"; };
 		4982B6CD29CA3C3C008D2CCD /* PlaticaWatch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PlaticaWatch Watch App.entitlements"; sourceTree = "<group>"; };
+		C107473229D255E700531E5C /* python-third-party */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "python-third-party"; path = "PlaticaBot/python-third-party"; sourceTree = "<group>"; };
 		C1754B4029D21D3900FCE88E /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		C1754B4329D22F6400FCE88E /* Python.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Python.xcframework; path = PlaticaBot/Python.xcframework; sourceTree = "<group>"; };
 		C1754B4429D22F6400FCE88E /* python-stdlib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "python-stdlib"; path = "PlaticaBot/python-stdlib"; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		4982B6BB29CA360A008D2CCD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C107473229D255E700531E5C /* python-third-party */,
 				C1754B4429D22F6400FCE88E /* python-stdlib */,
 				C1754B4329D22F6400FCE88E /* Python.xcframework */,
 			);
