@@ -14,12 +14,13 @@ struct StatusBarView: View {
     @Binding var interactions: [Interaction]
     
     func tokensIn(interactions: Binding<[Interaction]>) -> Int {
+        let python = EmbeddedPython.shared
         var count: Int = 0
         for item in interactions.wrappedValue {
-            count += item.plain.count
-            count += item.query.count
+            count += python.tokenCountFor(input: item.plain)
+            count += python.tokenCountFor(input: item.query)
         }
-        return count/4
+        return count
     }
 
     var body: some View {
