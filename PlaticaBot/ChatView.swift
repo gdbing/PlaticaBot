@@ -281,7 +281,7 @@ struct ChatView: View {
     
     var body: some View {
         VStack (alignment: .leading) {
-            StatusBarView(temperature: $temperature, newModel: $newModel, interactions: $store.interactions)
+            StatusBarView(temperature: $temperature, newModel: $newModel, interactions: $store.interactions, prompt: $prompt)
             ScrollViewReader { proxy in
                 ScrollView  {
                     VStack {
