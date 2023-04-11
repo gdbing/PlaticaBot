@@ -100,6 +100,9 @@ struct GeneralSettings: View {
                 })
             }.padding([.leading, .trailing])
 #endif
+#if os(iOS)
+            NavigationLink("Personae", destination: PersonaSettings(personae: []))
+#endif
             if dismiss {
                 HStack {
                     Spacer ()
@@ -145,6 +148,11 @@ struct SettingsView: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
+        #if os(macOS)
         SettingsView(settingsShown: .constant (true), temperature: .constant(1.0), newModel: .constant(false), dismiss: false)
+        #endif
+        #if os(iOS)
+        iOSGeneralSettings(settingsShown: .constant (true), temperature: .constant(1.0), newModel: .constant(false), dismiss: false)
+        #endif
     }
 }

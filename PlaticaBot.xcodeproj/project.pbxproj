@@ -30,6 +30,7 @@
 		4982B6EC29CB9E15008D2CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4982B69229CA333E008D2CCD /* Assets.xcassets */; };
 		49EE9FE129D5BD450053A427 /* PlaticaBotMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EE9FE029D5BD450053A427 /* PlaticaBotMac.swift */; };
 		49EE9FE329D5BEED0053A427 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EE9FE229D5BEED0053A427 /* HistoryView.swift */; };
+		C1B5EE5C29D772A50063EDA6 /* PersonaSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B5EE5B29D772A40063EDA6 /* PersonaSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		4982B6CD29CA3C3C008D2CCD /* PlaticaWatch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PlaticaWatch Watch App.entitlements"; sourceTree = "<group>"; };
 		49EE9FE029D5BD450053A427 /* PlaticaBotMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaticaBotMac.swift; sourceTree = "<group>"; };
 		49EE9FE229D5BEED0053A427 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		C1B5EE5B29D772A40063EDA6 /* PersonaSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			children = (
 				4982B6C629CA3665008D2CCD /* MarkdownHelpers.swift */,
 				4982B6C529CA3665008D2CCD /* Settings.swift */,
+				C1B5EE5B29D772A40063EDA6 /* PersonaSettings.swift */,
 				4982B68E29CA333C008D2CCD /* PlaticaBotiOS.swift */,
 				49EE9FE029D5BD450053A427 /* PlaticaBotMac.swift */,
 				4982B6C229CA3642008D2CCD /* ChatView.swift */,
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49EE9FE329D5BEED0053A427 /* HistoryView.swift in Sources */,
+				C1B5EE5C29D772A50063EDA6 /* PersonaSettings.swift in Sources */,
 				49EE9FE129D5BD450053A427 /* PlaticaBotMac.swift in Sources */,
 				4982B69129CA333C008D2CCD /* ContentView.swift in Sources */,
 				4982B6C329CA3642008D2CCD /* ChatView.swift in Sources */,
