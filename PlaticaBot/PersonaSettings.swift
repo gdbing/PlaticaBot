@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: Persona Model
 
-struct Persona: Hashable, Identifiable {
+struct Persona: Hashable, Codable, Identifiable {
     var id: UUID
     var name: String
     var description: String
@@ -44,13 +44,23 @@ struct Persona: Hashable, Identifiable {
 // MARK: -
 // MARK: Personae storage
 
+private let personaeKey = "Personae"
+private func getPersonae () -> [Persona] {
+    let personae = NSUbiquitousKeyValueStore.default.array(forKey: personaeKey) ?? []
+    return personae.compactMap { $0 as? Persona }
+}
+
+private func setPersonae (_ value: [Persona]) {
+    NSUbiquitousKeyValueStore.default.set(value, forKey: personaeKey)
+    NSUbiquitousKeyValueStore.default.synchronize()
+}
 
 
 // MARK: -
 // MARK: Personae iOS View
 
 struct PersonaSettings: View {
-    @State var personae : [Persona] = []
+    @State var personae : [Persona] = getPersonae()
     @State var isPresentingNewPersonaView: Bool = false
     @State private var personaData = Persona.Data()
 
@@ -63,6 +73,7 @@ struct PersonaSettings: View {
                     }
                     .onDisappear() {
                     persona.update(from: personaData)
+                    setPersonae(personae)
                     personaData = Persona.Data()
                 }) {
                     PersonaListItem(persona: persona)
@@ -94,6 +105,7 @@ struct PersonaSettings: View {
                             Button("Add") {
                                 let newPersona = Persona.init(data: personaData)
                                 personae.append(newPersona)
+                                setPersonae(personae)
                                 isPresentingNewPersonaView = false
                                 personaData = Persona.Data()
                             }
