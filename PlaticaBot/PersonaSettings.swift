@@ -12,32 +12,32 @@ import SwiftUI
 struct Persona: Hashable, Codable, Identifiable {
     var id: UUID
     var name: String
-    var description: String
+    var direction: String
     
-    init(id: UUID = UUID(), name: String, description: String) {
+    init(id: UUID = UUID(), name: String, direction: String) {
         self.id = id
         self.name = name
-        self.description = description
+        self.direction = direction
     }
     
     struct Data {
         var name = ""
-        var description = ""
+        var direction = ""
     }
     
     var data: Data {
-        Data(name: name, description: description)
+        Data(name: name, direction: direction)
     }
     
     mutating func update(from data: Data) {
         name = data.name
-        description = data.description
+        direction = data.direction
     }
     
     init(data: Data) {
         self.id = UUID()
         self.name = data.name
-        self.description = data.description
+        self.direction = data.direction
     }
 }
 
@@ -45,8 +45,9 @@ struct Persona: Hashable, Codable, Identifiable {
 // MARK: Personae storage
 
 private let personaeKey = "Personae"
+private let defaultPersona = Persona(name: "Default", direction: "You are a helpful assistant")
 private func getPersonae () -> [Persona] {
-    let personae = NSUbiquitousKeyValueStore.default.array(forKey: personaeKey) ?? []
+    let personae = NSUbiquitousKeyValueStore.default.array(forKey: personaeKey) ?? [defaultPersona]
     return personae.compactMap { $0 as? Persona }
 }
 
@@ -126,7 +127,7 @@ struct PersonaListItem: View {
             VStack(alignment: .leading) {
                 Text(persona.name)
                     .font(.headline)
-                Text(persona.description)
+                Text(persona.direction)
                     .font(.caption)
                     .lineLimit(1)
             }
@@ -142,7 +143,7 @@ struct PersonaEditView: View {
         Form {
             Section {
                 TextField("Name", text: $personaData.name)
-                TextField("Description", text: $personaData.description)
+                TextField("Direction", text: $personaData.direction, axis: .vertical)
             }
         }
     }
@@ -183,10 +184,13 @@ struct PersonaListToolbar: View {
 
 struct PersonaSettings_Previews: PreviewProvider {
     static var previews: some View {
-        let personae = [Persona(name: "Default", description: "You are a helpful AI assistant"),
-                        Persona(name: "Jason", description: "You are an AI Assistant and always write the output of your response in json."),
-                        Persona(name: "Socrates", description: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to ask just the right question to help them learn to think for themselves. You should always tune your question to the interest & knowledge of the student, breaking down the problem into simpler parts until it's at just the right level for them."),
-                        Persona(name: "Guy who's into videogames", description: "You are zealous about videogames and try to find a way to bring every conversation topic around to them, no matter how much of a stretch.")]
+        let personae = [
+            Persona(name: "Default", direction: "You are a helpful AI assistant"),
+            Persona(name: "Jason", direction: "You are an AI Assistant and always write the output of your response in json."),
+            Persona(name: "Socrates", direction: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to ask just the right question to help them learn to think for themselves. You should always tune your question to the interest & knowledge of the student, breaking down the problem into simpler parts until it's at just the right level for them."),
+            Persona(name: "Guy who's into videogames", direction: "You are zealous about videogames and try to find a way to bring every conversation topic around to them, no matter how much of a stretch."),
+            Persona(name: "Saltwater Sid", direction: "You are a pirate. Speak with pirate slang, slip in pirate puns wherever possible, and end responses with a hearty \"arr!\"")
+        ]
         NavigationView {
             PersonaSettings(personae: personae)
         }
