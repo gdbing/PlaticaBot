@@ -12,48 +12,89 @@ import SwiftUI
 // MARK: Settings Storage
 
 class SettingsStorage: ObservableObject {
+    private let userDefaults = UserDefaults.standard
     private let keyValueStore = NSUbiquitousKeyValueStore.default
 
     private let APIKeyKey = "OpenAI-key"
     @Published var apiKey: String {
         didSet {
+            userDefaults.set(apiKey, forKey: APIKeyKey)
             keyValueStore.set(apiKey, forKey: APIKeyKey)
-            keyValueStore.synchronize()
         }
     }
     private let temperatureKey = "Temperature-key"
     @Published var temperature: Float {
         didSet {
+            userDefaults.set(temperature, forKey: temperatureKey)
             keyValueStore.set(temperature, forKey: temperatureKey)
-            keyValueStore.synchronize()
         }
     }
     private let modelKey = "Model-key"
     @Published var newModel: Bool {
         didSet {
+            userDefaults.set(newModel, forKey: modelKey)
             keyValueStore.set(newModel, forKey: modelKey)
-            keyValueStore.synchronize()
         }
     }
 #if os(macOS)
     private let showDockIconKey = "ShowDockIcon-key"
     @Published var showDockIcon: Bool {
         didSet {
-            keyValueStore.set(showDockIcon, forKey: showDockIconKey)
-            keyValueStore.synchronize()
+            userDefaults.set(showDockIcon, forKey: showDockIconKey)
         }
     }
 #endif
     
     init() {
-        self.apiKey = keyValueStore.string(forKey: APIKeyKey) ?? ""
-        self.temperature = keyValueStore.object(forKey: temperatureKey) as? Float ?? 1.0
-        self.newModel = keyValueStore.bool(forKey: modelKey)
+        self.apiKey = userDefaults.string(forKey: APIKeyKey) ?? ""
+        self.temperature = userDefaults.object(forKey: temperatureKey) as? Float ?? 1.0
+        self.newModel = userDefaults.bool(forKey: modelKey)
 #if os(macOS)
-        self.showDockIcon = keyValueStore.bool(forKey: showDockIconKey)
+        self.showDockIcon = userDefaults.bool(forKey: showDockIconKey)
 #endif
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ubiquitousKeyValueStoreDidChange(_:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: keyValueStore)
+        
+        if keyValueStore.synchronize() == false {
+            fatalError("\(String(describing: Bundle.main.infoDictionary?["CFBundleName"])) was built without the required iCloud entitlements.")
+        }
     }
+    
+    @objc
+    private func ubiquitousKeyValueStoreDidChange(_ notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        
+        guard let changedKeys = userInfo[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] else { return }
+        for key in changedKeys {
+            switch key {
+            case APIKeyKey:
+                if let apiKey = keyValueStore.object(forKey: APIKeyKey) as? String {
+                    DispatchQueue.main.async {
+                        self.apiKey = apiKey
+                    }
+                }
+                break
+            case temperatureKey:
+                if let temperature = keyValueStore.object(forKey: temperatureKey) as? Float {
+                    DispatchQueue.main.async {
+                        self.temperature = temperature
+                    }
+                }
+                break
+            case modelKey:
+                let newModel = keyValueStore.bool(forKey: modelKey)
+                DispatchQueue.main.async {
+                    self.newModel = newModel
+                }
+                break
+            default:
+                break
+            }
+        }
+    }
+}
 
+extension SettingsStorage {
     static let preview = SettingsStorage()
 }
 
