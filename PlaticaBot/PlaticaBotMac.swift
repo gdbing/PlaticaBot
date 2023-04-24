@@ -38,9 +38,20 @@ struct PlaticaBotApp: App {
     
     var body: some Scene {
         WindowGroup (id: "chat") {
-            ContentView()
-                .onAppear {
-                    guard let window = NSApplication.shared.windows.first(where: { $0.isVisible }) else { return }
+            NavigationStack {
+                if settings.apiKey == "" {
+                    Text ("Please set your key in Settings")
+                    Button (action: {
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    }) {
+                        Text ("Open Settings")
+                    }
+                } else {
+                    ContentView()
+                }
+            }
+            .onAppear {
+                guard let window = NSApplication.shared.windows.first(where: { $0.isVisible }) else { return }
                     window.orderFront(self)
                     NSApplication.shared.activate(ignoringOtherApps: true)
                 }

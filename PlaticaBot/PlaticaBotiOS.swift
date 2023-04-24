@@ -13,8 +13,14 @@ struct PlaticaBotApp: App {
 
     var body: some Scene {
         WindowGroup (id: "chat") {
-            ContentView()
-                .environmentObject(settings)
+            NavigationStack {
+                if settings.apiKey == "" {
+                    iOSGeneralSettings(settingsShown: .constant(true), dismiss: false)
+                } else {
+                    ContentView()
+                }
+            }
+            .environmentObject(settings)
         }
     }
 }
