@@ -424,12 +424,6 @@ struct ChatView: View {
             ToolbarItem(placement: .primaryAction) {
                 shareView
             }
-            #elseif os(macOS)
-            ToolbarItem(placement: .destructiveAction){
-                Button(action: newChat) {
-                    Text ("New Chat")
-                }
-            }
             #elseif os(iOS)
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: newChat) {
