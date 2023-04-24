@@ -10,15 +10,17 @@ import SwiftUI
 @main
 struct PlaticaBotApp: App {
     @StateObject private var settings = SettingsStorage()
-
+    @State private var showSettings: Bool = false
     var body: some Scene {
         WindowGroup (id: "chat") {
             NavigationStack {
-                if settings.apiKey == "" {
-                    iOSGeneralSettings(settingsShown: .constant(true), dismiss: false)
-                } else {
-                    ContentView()
-                }
+                ContentView()
+                    .sheet (isPresented: $showSettings) {
+                        iOSGeneralSettings(settingsShown: $showSettings, dismiss: true)
+                    }
+                    .onAppear {
+                        showSettings = settings.apiKey == ""
+                    }
             }
             .environmentObject(settings)
         }
