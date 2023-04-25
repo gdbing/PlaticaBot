@@ -24,24 +24,17 @@ struct ChatPreview: View {
 
 struct StaticChatView: View {
     @Binding var interactions: [Interaction]
-    @State var synthesizer: AVSpeechSynthesizer
-    @State var synthesizerDelegate: SpeechDelegate?
-    @State var speaking: UUID? = nil
+    let synthesizerDelegate = SpeechDelegate()
     
     init (interactions: Binding<[Interaction]>) {
         self._interactions = interactions
-        _synthesizer = State (initialValue: AVSpeechSynthesizer())
-        _synthesizerDelegate = State (initialValue: nil)
-        let d = SpeechDelegate (speaking: .constant(nil))
-        _synthesizerDelegate = State (initialValue: d)
-        synthesizer.delegate = synthesizerDelegate
     }
     
     var body: some View {
         ScrollView {
             Text ("Conversation from \((interactions.first?.date ?? Date()).formatted(date: .abbreviated, time: .shortened))")
             ForEach (interactions, id: \.id) { inter in
-                InteractionView(interaction: inter, synthesizer: $synthesizer, speaking: $speaking)
+                InteractionView(interaction: inter, synthesizerDelegate: synthesizerDelegate)
             }
         }
     }

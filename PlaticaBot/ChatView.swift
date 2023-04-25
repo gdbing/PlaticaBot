@@ -67,8 +67,7 @@ extension ShapeStyle where Self == Color {
 
 struct InteractionView: View {
     var interaction: Interaction
-    @Binding var synthesizer: AVSpeechSynthesizer
-    @Binding var speaking: UUID?
+    @ObservedObject var synthesizerDelegate: SpeechDelegate
     
     var img: some View {
         VStack { Image (systemName: "person") }
@@ -89,27 +88,15 @@ struct InteractionView: View {
                     Image (systemName: "tortoise")
                         .font (.footnote)
                     Spacer ()
-                    
-                    Image (systemName: speaking == interaction.id ? "stop" : "play")
+                    Image (systemName: synthesizerDelegate.speakingID == interaction.id ? "stop" : "play")
                         .font (.footnote)
-                        .foregroundColor(speaking == interaction.id ? Color.accentColor : Color.primary)
+                        .foregroundColor(synthesizerDelegate.speakingID == interaction.id ? Color.accentColor : Color.primary)
                         .onTapGesture {
-                            if speaking == interaction.id {
-                                synthesizer.stopSpeaking(at: .word)
-                                speaking = nil
+                            if synthesizerDelegate.speakingID == interaction.id {
+                                synthesizerDelegate.stopSpeaking()
                                 return
-                            } else if speaking != nil {
-                                synthesizer.stopSpeaking(at: .word)
                             }
-                            let utterance = AVSpeechUtterance(string: interaction.plain)
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-                            // Alternative:
-                            //                             utterance.voice = AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.en-US.Rocko")
-                            
-                            //utterance.rate = 0.5
-                            
-                            synthesizer.speak(utterance)
-                            speaking = interaction.id
+                            synthesizerDelegate.speak(lines: interaction.plain, speakingID: interaction.id)
                         }
                 }
             } text: {
@@ -167,47 +154,59 @@ class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
 }
 #endif
 
-class SpeechDelegate: NSObject, AVSpeechSynthesizerDelegate {
-    @Binding var speaking: UUID?
+class SpeechDelegate: NSObject, AVSpeechSynthesizerDelegate, ObservableObject {
+    private let synthesizer: AVSpeechSynthesizer
+    @Published var speakingID: UUID?
     
-    init (speaking: Binding<UUID?>) {
-        _speaking = speaking
+    override init() {
+        synthesizer = AVSpeechSynthesizer()
+        super.init()
+        synthesizer.delegate = self
     }
     
-    func set (speaking: Binding<UUID?>) {
-        _speaking = speaking
+    func speak(lines: String, speakingID: UUID) {
+        stopSpeaking()
+
+        self.speakingID = speakingID
+        let utterance = AVSpeechUtterance(string: lines)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+        // Alternative:
+        utterance.voice = AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.en-US.Rocko")
+        utterance.rate = 0.5
+
+        synthesizer.speak(utterance)
+        
+        print("speak")
     }
     
+    func stopSpeaking() {
+        synthesizer.stopSpeaking(at: .word)
+        speakingID = nil
+    }
+
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        speaking = nil
-    }
-    
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didPause utterance: AVSpeechUtterance) {
+        speakingID = nil
     }
 }
 
 struct ChatView: View {
     @EnvironmentObject var settings: SettingsStorage
-    @State var id: UUID
-    @State var starDate = Date()
+    let id: UUID = UUID()
     @State var chat = ChatGPT(key: "")
     @State var prompt: String = ""
-    @State var started = Date ()
+    @State var started = Date()
     @StateObject var store = InteractionStorage ()
     @FocusState private var isPromptFocused: Bool
     @State var prime = false
     @State var appended = 0
     @State var stopAutoscroll = false
     @State private var scrollViewContentOffset = CGFloat(0)
-    @State var synthesizer: AVSpeechSynthesizer
-    @State var synthesizerDelegate: SpeechDelegate?
-    @State var playing = false
-    @State var speaking: UUID? = nil
+    private let synthesizerDelegate: SpeechDelegate = SpeechDelegate()
     @State var showSettings: Bool = false
     @State var showHistory: Bool = false
     @State var chatInteraction: Interaction? = nil
     #if os(iOS)
-    private var scrollViewDelegate = ScrollViewDelegate()
+    private let scrollViewDelegate = ScrollViewDelegate()
     #endif
     
     #if os(tvOS) || os(iOS)
@@ -217,12 +216,6 @@ struct ChatView: View {
     
     init (prime: Bool = false) {
         self._prime = State (initialValue: prime)
-        self._id = State (initialValue: UUID())
-        _synthesizer = State (initialValue: AVSpeechSynthesizer())
-        _synthesizerDelegate = State (initialValue: nil)
-        let d = SpeechDelegate (speaking: .constant(nil))
-        _synthesizerDelegate = State (initialValue: d)
-        synthesizer.delegate = synthesizerDelegate
     }
     
     func saveConversation () {
@@ -364,10 +357,10 @@ struct ChatView: View {
                             }
                         }
                         ForEach (store.interactions) { inter in
-                            InteractionView(interaction: inter, synthesizer: $synthesizer, speaking: $speaking)
+                            InteractionView(interaction: inter, synthesizerDelegate: synthesizerDelegate)
                         }
                         if let chatInteraction {
-                            InteractionView(interaction: chatInteraction, synthesizer: $synthesizer, speaking: $speaking)
+                            InteractionView(interaction: chatInteraction, synthesizerDelegate: synthesizerDelegate)
                                 .id (10)
                         }
                     }
@@ -463,7 +456,6 @@ struct ChatView: View {
             if prime {
                 store.interactions.append(Interaction(query: "Hello", plain: "World `here`"))
             }
-            synthesizerDelegate?.set (speaking: $speaking)
         }
     }
 }
