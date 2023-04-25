@@ -205,6 +205,7 @@ struct ChatView: View {
     @State var showSettings: Bool = false
     @State var showHistory: Bool = false
     @State var chatInteraction: Interaction? = nil
+    @State var serial = 1
     #if os(iOS)
     private let scrollViewDelegate = ScrollViewDelegate()
     #endif
@@ -225,7 +226,7 @@ struct ChatView: View {
         guard let result = try? JSONEncoder().encode(store.interactions) else {
             return
         }
-        let file = doc.appendingPathComponent("chat-\(id).json")
+        let file = doc.appendingPathComponent("chat-\(id)-\(serial).json")
         try? result.write(to: file)
     }
     
@@ -233,12 +234,10 @@ struct ChatView: View {
     func appendAnswer (_ text: String) {
         chatInteraction?.plain += text
         appended += 1
-        
-        saveConversation()
     }
    
     func saveChat () {
-        // Save the chat
+        saveConversation()
     }
     
     func newChat () {
@@ -246,6 +245,7 @@ struct ChatView: View {
         store.interactions = []
         started = Date ()
         chat = ChatGPT(key: "")
+        serial += 1
     }
     
     func getMessageSummary () -> String {
@@ -272,7 +272,7 @@ struct ChatView: View {
         appended += 1
 
         Task {
-            chat.model = settings.newModel ? "gpt-4-0314" : "gpt-3.5-turbo"
+            chat.model = settings.newModel ? "gpt-4" : "gpt-3.5-turbo"
             chat.key = settings.apiKey
             switch await chat.streamChatText(copy, temperature: settings.temperature) {
             case .failure(let error):
@@ -291,10 +291,11 @@ struct ChatView: View {
                     if let chatInteraction {
                         store.interactions.append(chatInteraction)
                     }
+                    saveChat ()
+
                     chatInteraction = nil
                     appended += 1
                 }
-                saveChat ()
             }
         }
     }
